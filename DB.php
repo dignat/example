@@ -51,6 +51,18 @@
 			}
 		}
 			return $data;
+		} 
+		private function dataMulti($data)
+		{
+			if(is_array($data)){
+				foreach($data as $key=>$value){
+					if(is_array($data[$value])){
+						$data = mysql_real_escape_string($data, $this->con);
+					}
+
+					
+				}
+			}
 		}
 
 		private function setRows($rows)
@@ -68,7 +80,7 @@
 
 			}
 			else{
-				return $string;
+				return $this->rows;
 			}
 
 		}
@@ -124,38 +136,44 @@
 
 		public function insert($array, $name)
 		{
-			$array = $this->data($array);
+			//$array = $this->dataMulti($array);
 			$table = $this->name;
 
 				
                // array_push($exclude, 'MAX_FILE_SIZE'); // Automatically exclude this one
                 
                 // Prepare Variables
-                $array = $this->data($array);
+               
+                if(is_array($array)){
                 
-                
-                foreach($array as $key=>$value){
-                       
-                        $insert = "INSERT INTO {$name} VALUES (' ', ";
+               foreach($array as $item=>$end){
+					if(is_array($end)){
+						foreach($end as $k=>$v){
+						$insert = "INSERT INTO {$name} VALUES (' ', ";
                       
-                        $insert .= "'{$value}'";
+                      		$insert .= "'{$v}'";
                 
                
                 //$insert = substr($insert, 0, -2);
 				
-				$insert .= ")";
-				$query = $this->query($insert);
-				/*if(!$query){
+							$insert .= ")";
+							$query = $this->query($insert);
+
+				if(!$query){
 					echo 'No insert has beed performed';
 				}
 				else{
 					echo "I bet you need this news";
 				}
 
-				//print $insert;*/
+
+				print $insert;
+				
+		}
+	}
+	
 }
-
-
+}
 	
 			
 		}
